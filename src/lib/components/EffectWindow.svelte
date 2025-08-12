@@ -7,14 +7,11 @@
     height = 300,
     displacementScale = 22,
     blur = 1.5,
-    aberration = 0.02,
-    edgeAberration = 0.02,
-    edgeWidth = 2,
-    edgeFeather = 10,
-    turbulenceBaseX = 0.001,
-    turbulenceBaseY = 0.001,
+    aberration = 1.6,
+    turbulenceBaseX = 0.008,
+    turbulenceBaseY = 0.013,
     turbulenceOctaves = 2,
-    magnification = 1.5
+    magnification = 1.1
   } = $props<{
     imageUrl: string;
     stageWidth: number;
@@ -28,9 +25,6 @@
     turbulenceBaseY?: number;
     turbulenceOctaves?: number;
     magnification?: number;
-    edgeAberration?: number;
-    edgeWidth?: number;
-    edgeFeather?: number;
   }>();
 
   // Draggable position
@@ -86,61 +80,54 @@
 >
   <svg class="svg" {width} {height} viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
     <defs>
-      <!-- Reusable rounded-rect shape -->
-      <rect id={`${uid}-shape`} x="0" y="0" width={width} height={height} rx="16" ry="16" />
       <clipPath id={`${uid}-clip`}>
-        <use href={`#${uid}-shape`} />
+        <rect x="0" y="0" width={width} height={height} rx="16" ry="16" />
       </clipPath>
 
-      <!-- Edge mask: a stroked rounded-rect with feather -->
-      <filter id={`${uid}-edge-feather`} x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur stdDeviation={edgeFeather} />
-      </filter>
-      <mask id={`${uid}-edge-mask`} maskUnits="userSpaceOnUse">
-        <!-- black background hides everything by default -->
-        <rect x="0" y="0" width={width} height={height} fill="black" />
-        <!-- white ring around the edges shows only that region -->
-        <use href={`#${uid}-shape`} fill="none" stroke="white" stroke-width={edgeWidth * 2} filter={`url(#${uid}-edge-feather)`} />
-      </mask>
-
-      <!-- Base filter: displacement + blur + subtle aberration -->
-      <filter id={`${uid}-filter-base`} x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-        <feTurbulence type="turbulence" baseFrequency={`${turbulenceBaseX} ${turbulenceBaseY}`} numOctaves={turbulenceOctaves} seed="3" stitchTiles="stitch" result="noise">
+      <filter id={`${uid}-filter`} x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+        <feTurbulence
+          type="turbulence"
+          baseFrequency={`${turbulenceBaseX} ${turbulenceBaseY}`}
+          numOctaves={turbulenceOctaves}
+          seed="3"
+          stitchTiles="stitch"
+          result="noise"
+        >
           <animate attributeName="baseFrequency" values={`${turbulenceBaseX} ${turbulenceBaseY}; ${turbulenceBaseX * 1.4} ${turbulenceBaseY * 1.4}; ${turbulenceBaseX} ${turbulenceBaseY}`} dur="16s" repeatCount="indefinite" />
         </feTurbulence>
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale={displacementScale} xChannelSelector="R" yChannelSelector="G" result="disp" />
-        <feGaussianBlur in="disp" stdDeviation={blur} result="soft" />
-        <feColorMatrix in="soft" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r_b" />
-        <feOffset in="r_b" dx={aberration} dy="0" result="r_b_off" />
-        <feColorMatrix in="soft" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g_b" />
-        <feOffset in="g_b" dx="0" dy="0" result="g_b_off" />
-        <feColorMatrix in="soft" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b_b" />
-        <feOffset in="b_b" dx={-aberration} dy="0" result="b_b_off" />
-        <feBlend in="r_b_off" in2="g_b_off" mode="screen" result="rg_b" />
-        <feBlend in="rg_b" in2="b_b_off" mode="screen" result="final_base" />
-      </filter>
 
-      <!-- Edge filter: displacement + blur + STRONG aberration -->
-      <filter id={`${uid}-filter-edge`} x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-        <feTurbulence type="turbulence" baseFrequency={`${turbulenceBaseX} ${turbulenceBaseY}`} numOctaves={turbulenceOctaves} seed="4" stitchTiles="stitch" result="noise" />
+        <!-- Displace based on noise -->
         <feDisplacementMap in="SourceGraphic" in2="noise" scale={displacementScale} xChannelSelector="R" yChannelSelector="G" result="disp" />
+
+        <!-- Optional blur for softness/depth -->
         <feGaussianBlur in="disp" stdDeviation={blur} result="soft" />
-        <feOffset in="soft" dx={edgeAberration} dy="0" result="soft_r" />
-        <feColorMatrix in="soft_r" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r_e" />
-        <feOffset in="soft" dx={-edgeAberration} dy="0" result="soft_b" />
-        <feColorMatrix in="soft_b" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b_e" />
-        <feBlend in="r_e" in2="b_e" mode="screen" result="final_edge" />
+
+        <!-- Chromatic aberration: split channels and offset -->
+        <feColorMatrix in="soft" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r" />
+        <feOffset in="r" dx={aberration} dy="0" result="r2" />
+
+        <feColorMatrix in="soft" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g" />
+        <feOffset in="g" dx="0" dy="0" result="g2" />
+
+        <feColorMatrix in="soft" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b" />
+        <feOffset in="b" dx={-aberration} dy="0" result="b2" />
+
+        <feBlend in="r2" in2="g2" mode="screen" result="rg" />
+        <feBlend in="rg" in2="b2" mode="screen" result="final" />
+
+        <feComposite in="final" in2="final" operator="over" />
       </filter>
     </defs>
 
-    <!-- Base layer -->
-    <g clip-path={`url(#${uid}-clip)`} filter={`url(#${uid}-filter-base)`}>
-      <image href={imageUrl} x={imageX} y={imageY} width={imgWidth} height={imgHeight} preserveAspectRatio="xMidYMid slice" />
-    </g>
-
-    <!-- Edge-only strong aberration layer -->
-    <g clip-path={`url(#${uid}-clip)`} mask={`url(#${uid}-edge-mask)`} filter={`url(#${uid}-filter-edge)`}>
-      <image href={imageUrl} x={imageX} y={imageY} width={imgWidth} height={imgHeight} preserveAspectRatio="xMidYMid slice" />
+    <g clip-path={`url(#${uid}-clip)`} filter={`url(#${uid}-filter)`}>
+      <image
+        href={imageUrl}
+        x={imageX}
+        y={imageY}
+        width={imgWidth}
+        height={imgHeight}
+        preserveAspectRatio="xMidYMid slice"
+      />
     </g>
 
     <!-- Subtle border -->
