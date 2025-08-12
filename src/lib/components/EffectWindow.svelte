@@ -11,7 +11,8 @@
     turbulenceBaseX = 0.008,
     turbulenceBaseY = 0.013,
     turbulenceOctaves = 2,
-    magnification = 1.1
+    magnification = 1.1,
+    animateNoise = false
   } = $props<{
     imageUrl: string;
     stageWidth: number;
@@ -25,6 +26,7 @@
     turbulenceBaseY?: number;
     turbulenceOctaves?: number;
     magnification?: number;
+    animateNoise?: boolean;
   }>();
 
   // Draggable position
@@ -93,7 +95,9 @@
           stitchTiles="stitch"
           result="noise"
         >
-          <animate attributeName="baseFrequency" values={`${turbulenceBaseX} ${turbulenceBaseY}; ${turbulenceBaseX * 1.4} ${turbulenceBaseY * 1.4}; ${turbulenceBaseX} ${turbulenceBaseY}`} dur="16s" repeatCount="indefinite" />
+          {#if animateNoise}
+            <animate attributeName="baseFrequency" values={`${turbulenceBaseX} ${turbulenceBaseY}; ${turbulenceBaseX * 1.4} ${turbulenceBaseY * 1.4}; ${turbulenceBaseX} ${turbulenceBaseY}`} dur="16s" repeatCount="indefinite" />
+          {/if}
         </feTurbulence>
 
         <!-- Displace based on noise -->
