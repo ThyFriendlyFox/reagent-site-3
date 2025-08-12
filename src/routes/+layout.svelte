@@ -30,7 +30,7 @@
     </div>
 
     <nav class="nav nav-right" aria-label="Primary right">
-      <a href="/solutions" class="nav-link">solutions</a>
+      <a href="/agents" class="nav-link">agents</a>
     </nav>
   </div>
 </header>
@@ -61,7 +61,7 @@
   }
   .header-inner {
     width: 100%;
-    max-width: 1200px;
+    max-width: none;
     margin: 0 auto;
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -69,9 +69,32 @@
     gap: 24px;
     padding: 0;
     pointer-events: none;
-    --edge-pad: 24px; /* symmetric padding from left/right edges */
+    /* Independent min/max edge paddings for left/right nav containers */
+    --pad-left-min: 16px;
+    --pad-left-max: 240px;
+    --pad-right-min: 16px;
+    --pad-right-max: 240px;
+    --pad-left: clamp(var(--pad-left-min), 8vw, var(--pad-left-max));
+    --pad-right: clamp(var(--pad-right-min), 8vw, var(--pad-right-max));
+    position: relative; /* anchor absolute-centered logo */
   }
-  .logo-wrap { pointer-events: auto; justify-self: center; }
+
+  /* Scale edge padding faster on wider screens without changing small-screen spacing */
+  @media (min-width: 640px) {
+    .header-inner {
+      --pad-left: clamp(var(--pad-left-min), 16vw, 480px);
+      --pad-right: clamp(var(--pad-right-min), 16vw, 480px);
+    }
+  }
+
+  /* Third tier: very wide screens — bring links further inward */
+  @media (min-width: 1280px) {
+    .header-inner {
+      --pad-left: clamp(var(--pad-left-min), 24vw, 720px);
+      --pad-right: clamp(var(--pad-right-min), 24vw, 720px);
+    }
+  }
+  .logo-wrap { pointer-events: auto; position: absolute; left: 50%; top: 0; transform: translateX(-50%); }
   .logo-link { display: inline-block; text-decoration: none; }
 
   /* Overhanging centered logo */
@@ -80,10 +103,17 @@
     height: var(--logo-h, 80px);
     transform: translateY(10px); /* overhang below header */
     filter: drop-shadow(0 4px 14px rgba(0,0,0,0.35));
+    transition: transform 180ms ease, filter 180ms ease;
+    will-change: transform;
+  }
+  .logo-link:hover .logo,
+  .logo-link:focus-visible .logo {
+    transform: translateY(10px) scale(1.12); /* uniform scale preserves aspect ratio */
+    filter: drop-shadow(0 6px 18px rgba(0,0,0,0.45));
   }
 
   /* Triangle behind logo */
-  .hex { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+  .hex { position: absolute; left: 50%; top: 0; transform: translateX(-50%); display: grid; place-items: center; pointer-events: none; }
   .hex-svg { width: 140px; height: 130px; transform: translateY(var(--hex-offset-y, -10px)) rotate(0deg); }
   .hex-svg polygon { stroke: none; fill: #0F0F0F; filter: none; }
   /* Navigation styling */
@@ -94,11 +124,12 @@
     pointer-events: auto;
     justify-self: stretch;
     min-width: 0;
-    align-self: start; /* anchor to top of header */
-    transform: translateY(var(--nav-offset-y, 8px)); /* nudge upward without moving logo */
+    align-self: center; /* vertically align to header center */
+    transform: translateY(var(--nav-offset-y, -4px)); /* slight upward nudge */
   }
-  .nav-left { justify-content: flex-start; padding-left: var(--edge-pad); }
-  .nav-right { justify-content: flex-end; justify-self: end; padding-right: var(--edge-pad); }
+  /* Each nav is a padded container; the link is centered inside that container */
+  .nav-left { justify-content: center; padding-left: var(--pad-left); justify-self: start; }
+  .nav-right { justify-content: center; padding-right: var(--pad-right); justify-self: end; }
 
   .nav-link {
     font-family: "avionic wide book", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial;
@@ -108,7 +139,7 @@
     color: rgba(255, 255, 255, 0.92);
     text-decoration: none;
     letter-spacing: 0.04em;
-    padding: 0.5rem 0.5rem;
+    padding: 0.25rem 0; /* remove horizontal padding so edge distance equals container padding */
     border-radius: 6px;
     transition: color 120ms ease, background-color 120ms ease;
     white-space: nowrap; /* prevent breaking link labels */
