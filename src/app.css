@@ -1,0 +1,37 @@
+/* Global styles (not scoped) */
+@font-face {
+  font-family: 'avionic';
+  src: url('/fonts/AvionicWide-Book.otf') format('opentype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Colors */
+  --white: #ffffff;
+  --gray-900: #0f1115;
+  --gray-700: #1a1d24;
+  --gray-400: #a7adba;
+  /* Layout */
+  --container: 75rem; /* 1200px */
+  --header-h: 4rem;   /* 64px */
+  --pad: 1rem;        /* 16px */
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--gray-900);
+  color: var(--white);
+  font-family: 'avionic', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-weight: 200;
+  line-height: 1.6;
+  font-size: 16px; /* base for rems */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+a { color: inherit; text-decoration: none; }
+
+#svelte { min-height: 100vh; display: contents; } 
