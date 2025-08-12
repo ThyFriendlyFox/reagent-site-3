@@ -113,7 +113,7 @@
         <feColorMatrix in="soft" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g" />
         <feOffset in="g" dx="0" dy="0" result="g2" />
 
-        <feColorMatrix in="soft" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b" />
+        <feColorMatrix in="soft" type="matrix" values="0 0 0 0 0  0 0 1 0 0 0  0 0 0 1 0" result="b" />
         <feOffset in="b" dx={-aberration} dy="0" result="b2" />
 
         <feBlend in="r2" in2="g2" mode="screen" result="rg" />
