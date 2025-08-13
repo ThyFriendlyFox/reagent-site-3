@@ -127,7 +127,8 @@
   .overlay {
     position: absolute;
     inset: 0;
-    background: radial-gradient(120% 120% at 50% 0%, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.7) 100%);
+    /* Light overlay to brighten background */
+    background: radial-gradient(120% 120% at 50% 0%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.55) 60%, rgba(255,255,255,0.7) 100%);
   }
 
   @media (prefers-reduced-motion: reduce) {

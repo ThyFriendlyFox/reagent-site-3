@@ -5,7 +5,7 @@
   import { page } from '$app/stores';
 
   const currentYear: number = new Date().getFullYear();
-  const BASE_URL = 'https://firstcoastalarm.com';
+  const BASE_URL = 'https://www.reagent-systems.com';
 
   let headerEl: HTMLElement | null = null;
   let brandEl: HTMLElement | null = null;
@@ -36,7 +36,7 @@
   const organizationJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'First Coast Alarm',
+    name: 'Reagent Systems LLC',
     url: BASE_URL,
     logo: `${BASE_URL}/logo.svg`,
     address: {
@@ -50,7 +50,7 @@
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer service',
-      email: 'info@firstcoastalarm.com'
+      email: 'support@reagent-systems.com'
     },
     sameAs: []
   } as const;
@@ -58,7 +58,7 @@
   const websiteJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'First Coast Alarm',
+    name: 'Reagent Systems LLC',
     url: BASE_URL
   } as const;
 
@@ -66,39 +66,30 @@
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     itemListElement: [
-      {
-        '@type': 'SiteNavigationElement',
-        name: 'Home',
-        url: `${BASE_URL}/`
-      },
-      {
-        '@type': 'SiteNavigationElement',
-        name: 'Residential',
-        url: `${BASE_URL}/residential`
-      },
-      {
-        '@type': 'SiteNavigationElement',
-        name: 'Commercial',
-        url: `${BASE_URL}/commercial`
-      }
+      { '@type': 'SiteNavigationElement', name: 'Research', url: `${BASE_URL}/research` },
+      { '@type': 'SiteNavigationElement', name: 'Solutions', url: `${BASE_URL}/solutions` },
+      { '@type': 'SiteNavigationElement', name: 'Contracting', url: `${BASE_URL}/contracting` },
+      { '@type': 'SiteNavigationElement', name: 'Federal', url: `${BASE_URL}/federal` },
+      { '@type': 'SiteNavigationElement', name: 'Support', url: `${BASE_URL}/support` },
+      { '@type': 'SiteNavigationElement', name: 'Home', url: `${BASE_URL}/` }
     ]
   } as const;
 </script>
 
 <svelte:head>
-  <title>First Coast Alarm | Jacksonville Security, Alarm & Fire Systems</title>
-  <meta name="description" content="First Coast Alarm provides professional security, alarm, and fire systems for residential and commercial properties across Northeast Florida." />
+  <title>Reagent Systems LLC | Jacksonville Security, Alarm & Fire Systems</title>
+  <meta name="description" content="Reagent Systems LLC provides professional security, alarm, and fire systems for residential and commercial properties across Northeast Florida." />
   <link rel="canonical" href={`${BASE_URL}${$page.url.pathname}`} />
 
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="First Coast Alarm" />
-  <meta property="og:title" content="First Coast Alarm | Jacksonville Security, Alarm & Fire Systems" />
+  <meta property="og:site_name" content="Reagent Systems LLC" />
+  <meta property="og:title" content="Reagent Systems LLC | Jacksonville Security, Alarm & Fire Systems" />
   <meta property="og:description" content="Professional security, alarm, and fire systems for homes and businesses across Northeast Florida." />
   <meta property="og:url" content={`${BASE_URL}${$page.url.pathname}`} />
   <meta property="og:image" content={`${BASE_URL}/file.svg`} />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="First Coast Alarm | Jacksonville Security, Alarm & Fire Systems" />
+  <meta name="twitter:title" content="Reagent Systems LLC | Jacksonville Security, Alarm & Fire Systems" />
   <meta name="twitter:description" content="Professional security, alarm, and fire systems for homes and businesses across Northeast Florida." />
   <meta name="twitter:image" content={`${BASE_URL}/file.svg`} />
 
@@ -111,11 +102,11 @@
 
 <nav class="site-header" bind:this={headerEl}>
   <div class="wrap compact">
-    <a class="nav-link" href="/residential">research</a>
-    <a class="brand" href="/" aria-label="First Coast Alarm home" bind:this={brandEl}>
-      <img src="/logo.svg" alt="First Coast Alarm" class="brand-logo" decoding="async" fetchpriority="high" />
+    <a class="nav-link" href="/research">research</a>
+    <a class="brand" href="/" aria-label="Reagent Systems LLC home" bind:this={brandEl}>
+      <img src="/logo.svg" alt="Reagent Systems LLC" class="brand-logo" decoding="async" fetchpriority="high" />
     </a>
-    <a class="nav-link" href="/commercial">solutions</a>
+    <a class="nav-link" href="/solutions">solutions</a>
   </div>
 </nav>
 
