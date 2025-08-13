@@ -77,21 +77,21 @@
 </script>
 
 <svelte:head>
-  <title>Reagent Systems LLC | Jacksonville Security, Alarm & Fire Systems</title>
-  <meta name="description" content="Reagent Systems LLC provides professional security, alarm, and fire systems for residential and commercial properties across Northeast Florida." />
+  <title>Reagent Systems LLC | Researching Sentient Computing</title>
+  <meta name="description" content="Reagent Systems LLC pushes the boundaries of research into sentient computing." />
   <link rel="canonical" href={`${BASE_URL}${$page.url.pathname}`} />
 
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Reagent Systems LLC" />
-  <meta property="og:title" content="Reagent Systems LLC | Jacksonville Security, Alarm & Fire Systems" />
-  <meta property="og:description" content="Professional security, alarm, and fire systems for homes and businesses across Northeast Florida." />
+  <meta property="og:title" content="Reagent Systems LLC | AI Research, Agentic Apps" />
+  <meta property="og:description" content="Pushing the boundaries of research into sentient computing." />
   <meta property="og:url" content={`${BASE_URL}${$page.url.pathname}`} />
-  <meta property="og:image" content={`${BASE_URL}/file.svg`} />
+  <meta property="og:image" content={`${BASE_URL}/logo.svg`} />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Reagent Systems LLC | Jacksonville Security, Alarm & Fire Systems" />
-  <meta name="twitter:description" content="Professional security, alarm, and fire systems for homes and businesses across Northeast Florida." />
-  <meta name="twitter:image" content={`${BASE_URL}/file.svg`} />
+  <meta name="twitter:title" content="Reagent Systems LLC | AI Research, Agentic Apps" />
+  <meta name="twitter:description" content="Pushing the boundaries of research into sentient computing." />
+  <meta name="twitter:image" content={`${BASE_URL}/logo.svg`} />
 
   <script type="application/ld+json">{JSON.stringify(organizationJsonLd)}</script>
   <script type="application/ld+json">{JSON.stringify(websiteJsonLd)}</script>
