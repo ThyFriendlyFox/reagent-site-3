@@ -168,6 +168,11 @@
     --hex-y: 50%;
     /* vertical offset for hexagon relative to brand center (negative moves up) */
     --hex-offset-y: -1.25rem;
+    /* independent sizing controls */
+    --logo-scale-x: 1;
+    --logo-scale-y: 0.9;
+    --hex-width: 16rem;
+    --hex-height: 12rem;
   }
   /* top-right corner triangle */
   .site-header::after {
@@ -215,12 +220,12 @@
     height: 7.5rem; /* header is 4rem */
     width: auto;
     display: block;
-    transform: translateY(0.5rem); /* bias slightly upward */
+    transform: translateY(0.5rem) scaleX(var(--logo-scale-x)) scaleY(var(--logo-scale-y)); /* bias slightly upward with independent scaling */
     transform-origin: center;
     transition: transform 200ms ease;
     will-change: transform;
   }
-  .brand:hover .brand-logo { transform: translateY(0.5rem) scale(1.1); }
+  .brand:hover .brand-logo { transform: translateY(0.5rem) scaleX(calc(var(--logo-scale-x) * 1.1)) scaleY(calc(var(--logo-scale-y) * 1.1)); }
 
   /* Paint triangle at header background layer positioned by brand center */
   .site-header::before {
@@ -229,8 +234,8 @@
     top: calc(var(--hex-y) + var(--hex-offset-y));
     left: var(--hex-x);
     transform: translate(-50%, -47.5%);
-    width: 14rem;
-    height: 12rem;
+    width: var(--hex-width);
+    height: var(--hex-height);
     background: var(--gray-700);
     /* Downward-pointing triangle */
     clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
@@ -262,9 +267,16 @@
 
   @media (max-width: 51.25rem) {
     .site-header .wrap { height: 4rem; }
-    .brand-logo { height: 7.5rem; transform: translateY(0.5rem); }
+    .brand-logo { height: 7.5rem; transform: translateY(0.5rem) scaleX(var(--logo-scale-x)) scaleY(var(--logo-scale-y)); }
     .footer-grid { grid-template-columns: 1fr; gap: 0.5rem; }
-    .site-header { --corner: 2rem; }
+    .site-header {
+      --corner: 2rem;
+      /* downflow sizes for mobile */
+      --logo-scale-x: 1;
+      --logo-scale-y: 0.9;
+      --hex-width: 16rem;
+      --hex-height: 12rem;
+    }
     .nav-link { top: -1.75rem; }
   }
 </style>
