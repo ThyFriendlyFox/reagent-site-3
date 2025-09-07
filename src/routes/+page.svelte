@@ -1,4 +1,13 @@
 <script lang="ts">
+  import AgentsSection from '$lib/components/AgentsSection.svelte';
+  import VisionSection from '$lib/components/VisionSection.svelte';
+  import ResearchSection from '$lib/components/ResearchSection.svelte';
+  import ProductsSection from '$lib/components/ProductsSection.svelte';
+  import VolunteerSection from '$lib/components/VolunteerSection.svelte';
+  import DonateSection from '$lib/components/DonateSection.svelte';
+  import NewsButton from '$lib/components/NewsButton.svelte';
+  import SectionRibbon from '$lib/components/SectionRibbon.svelte';
+  
   const BASE_URL = 'https://www.reagent-systems.com';
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
@@ -7,7 +16,7 @@
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'Home',
+        name: 'home',
         item: `${BASE_URL}/`
       }
     ]
@@ -32,6 +41,7 @@
   <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
 </svelte:head>
 
+<!-- Hero Section -->
 <section class="hero-headline" aria-label="Primary message">
   <div class="inner">
     <div class="kicker">ai research</div>
@@ -40,8 +50,24 @@
       <span class="line">privacy focused</span>
     </h1>
   </div>
-  
 </section>
+
+<!-- All Sections -->
+<SectionRibbon ribbonIndex={0} />
+<AgentsSection />
+<SectionRibbon ribbonIndex={1} />
+<VisionSection />
+<SectionRibbon ribbonIndex={2} />
+<ResearchSection />
+<SectionRibbon ribbonIndex={3} />
+<ProductsSection />
+<SectionRibbon ribbonIndex={4} />
+<VolunteerSection />
+<SectionRibbon ribbonIndex={5} />
+<DonateSection />
+
+<!-- News Alert Footer -->
+<NewsButton />
 
 <style>
   .hero-headline {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import DigitalNeuralBackground from '$lib/components/DigitalNeuralBackground.svelte';
-  let { backgroundImageUrl, backgroundVideoUrl, children } = $props();
+  let { backgroundImageUrl = undefined, backgroundVideoUrl = undefined, children } = $props();
   
   const hasVideo = Boolean(backgroundVideoUrl);
   const hasImage = Boolean(backgroundImageUrl);

@@ -3,6 +3,13 @@
   import BackgroundSlideshow from '$lib/components/BackgroundSlideshow.svelte';
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
+  
+  function scrollToSection(sectionId: string) {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
 
   const currentYear: number = new Date().getFullYear();
   const BASE_URL = 'https://www.reagent-systems.com';
@@ -66,12 +73,12 @@
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     itemListElement: [
-      { '@type': 'SiteNavigationElement', name: 'Research', url: `${BASE_URL}/research` },
-      { '@type': 'SiteNavigationElement', name: 'Solutions', url: `${BASE_URL}/solutions` },
-      { '@type': 'SiteNavigationElement', name: 'Contracting', url: `${BASE_URL}/contracting` },
-      { '@type': 'SiteNavigationElement', name: 'Federal', url: `${BASE_URL}/federal` },
-      { '@type': 'SiteNavigationElement', name: 'Support', url: `${BASE_URL}/support` },
-      { '@type': 'SiteNavigationElement', name: 'Home', url: `${BASE_URL}/` }
+      { '@type': 'SiteNavigationElement', name: 'research', url: `${BASE_URL}/research` },
+      { '@type': 'SiteNavigationElement', name: 'products', url: `${BASE_URL}/products` },
+      { '@type': 'SiteNavigationElement', name: 'agents', url: `${BASE_URL}/agents` },
+      { '@type': 'SiteNavigationElement', name: 'vision', url: `${BASE_URL}/vision` },
+      { '@type': 'SiteNavigationElement', name: 'volunteer', url: `${BASE_URL}/volunteer` },
+      { '@type': 'SiteNavigationElement', name: 'donate', url: `${BASE_URL}/donate` }
     ]
   } as const;
 </script>
@@ -102,11 +109,11 @@
 
 <nav class="site-header" bind:this={headerEl}>
   <div class="wrap compact">
-    <a class="nav-link" href="/research">research</a>
+    <a class="nav-link" href="#research" on:click={() => scrollToSection('research')}>research</a>
     <a class="brand" href="/" aria-label="Reagent Systems LLC home" bind:this={brandEl}>
       <img src="/logo.svg" alt="Reagent Systems LLC" class="brand-logo" decoding="async" fetchpriority="high" />
     </a>
-    <a class="nav-link" href="/solutions">solutions</a>
+    <a class="nav-link" href="#products" on:click={() => scrollToSection('products')}>products</a>
   </div>
 </nav>
 
@@ -125,16 +132,16 @@
       </address>
     </div>
     <div class="footer-col">
-      <div class="footer-heading">Links</div>
-      <a href="/research" class="footer-link">Research</a>
-      <a href="/solutions" class="footer-link">Solutions</a>
-      <a href="/contracting" class="footer-link">Contracting</a>
-      <a href="/federal" class="footer-link">Federal</a>
-      <a href="/support" class="footer-link">Support</a>
-      <a href="/" class="footer-link">Home</a>
+      <div class="footer-heading">links</div>
+      <a href="#research" class="footer-link" on:click={() => scrollToSection('research')}>research</a>
+      <a href="#products" class="footer-link" on:click={() => scrollToSection('products')}>products</a>
+      <a href="#agents" class="footer-link" on:click={() => scrollToSection('agents')}>agents</a>
+      <a href="#vision" class="footer-link" on:click={() => scrollToSection('vision')}>vision</a>
+      <a href="#volunteer" class="footer-link" on:click={() => scrollToSection('volunteer')}>volunteer</a>
+      <a href="#donate" class="footer-link" on:click={() => scrollToSection('donate')}>donate</a>
     </div>
     <div class="footer-col">
-      <div class="footer-heading">Contact</div>
+      <div class="footer-heading">contact</div>
       <div class="muted">support@reagent-systems.com</div>
     </div>
   </div>
