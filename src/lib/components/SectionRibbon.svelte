@@ -13,13 +13,19 @@
   }
   
   const currentColor = getRandomColor(ribbonIndex, 0);
-  const topBorderColor = getRandomColor(ribbonIndex, 1);
-  const bottomBorderColor = getRandomColor(ribbonIndex, 2);
 </script>
 
-<div class="ribbon" style="border-top-color: {topBorderColor}; border-bottom-color: {bottomBorderColor};">
+<div class="ribbon">
   <div class="ribbon-content">
-    <div class="rhombus" style="background: {currentColor}"></div>
+    <svg class="logo-shape" viewBox="250 300 250 350" style="fill: #44C5EF">
+      <path d="m302.54,362.71c6.93,-11.77 13.61,-23.27 20.42,-34.7c2.72,-4.57 3.52,-4.57 6.15,0c14.83,25.79 29.58,51.63 44.37,77.44c0.22,0.39 0.73,0.61 1.47,1.21c15.63,-27.07 31.19,-54.01 47.29,-81.9c3.9,6.46 7.28,11.9 10.49,17.43c18.79,32.3 37.5,64.65 56.37,96.9c2.55,4.36 2.68,7.95 0.04,12.43c-18.22,30.94 -36.18,62.04 -54.25,93.06c-15.82,27.15 -31.69,54.26 -47.53,81.4c-4.32,7.4 -8.62,14.82 -13.75,23.64c-3.69,-6.2 -6.7,-11.19 -9.63,-16.22c-16.13,-27.71 -32.24,-55.43 -48.37,-83.14c-19.29,-33.16 -38.56,-66.32 -57.93,-99.43c-2.26,-3.86 -2.29,-7.06 0.07,-11.05c14.22,-24.04 28.19,-48.22 42.22,-72.37c0.84,-1.43 1.58,-2.92 2.57,-4.7z"/>
+    </svg>
+    <svg class="logo-shape" viewBox="250 300 250 350" style="fill: #00CD59">
+      <path d="m302.54,362.71c6.93,-11.77 13.61,-23.27 20.42,-34.7c2.72,-4.57 3.52,-4.57 6.15,0c14.83,25.79 29.58,51.63 44.37,77.44c0.22,0.39 0.73,0.61 1.47,1.21c15.63,-27.07 31.19,-54.01 47.29,-81.9c3.9,6.46 7.28,11.9 10.49,17.43c18.79,32.3 37.5,64.65 56.37,96.9c2.55,4.36 2.68,7.95 0.04,12.43c-18.22,30.94 -36.18,62.04 -54.25,93.06c-15.82,27.15 -31.69,54.26 -47.53,81.4c-4.32,7.4 -8.62,14.82 -13.75,23.64c-3.69,-6.2 -6.7,-11.19 -9.63,-16.22c-16.13,-27.71 -32.24,-55.43 -48.37,-83.14c-19.29,-33.16 -38.56,-66.32 -57.93,-99.43c-2.26,-3.86 -2.29,-7.06 0.07,-11.05c14.22,-24.04 28.19,-48.22 42.22,-72.37c0.84,-1.43 1.58,-2.92 2.57,-4.7z"/>
+    </svg>
+    <svg class="logo-shape" viewBox="250 300 250 350" style="fill: #FC0016">
+      <path d="m302.54,362.71c6.93,-11.77 13.61,-23.27 20.42,-34.7c2.72,-4.57 3.52,-4.57 6.15,0c14.83,25.79 29.58,51.63 44.37,77.44c0.22,0.39 0.73,0.61 1.47,1.21c15.63,-27.07 31.19,-54.01 47.29,-81.9c3.9,6.46 7.28,11.9 10.49,17.43c18.79,32.3 37.5,64.65 56.37,96.9c2.55,4.36 2.68,7.95 0.04,12.43c-18.22,30.94 -36.18,62.04 -54.25,93.06c-15.82,27.15 -31.69,54.26 -47.53,81.4c-4.32,7.4 -8.62,14.82 -13.75,23.64c-3.69,-6.2 -6.7,-11.19 -9.63,-16.22c-16.13,-27.71 -32.24,-55.43 -48.37,-83.14c-19.29,-33.16 -38.56,-66.32 -57.93,-99.43c-2.26,-3.86 -2.29,-7.06 0.07,-11.05c14.22,-24.04 28.19,-48.22 42.22,-72.37c0.84,-1.43 1.58,-2.92 2.57,-4.7z"/>
+    </svg>
   </div>
 </div>
 
@@ -27,13 +33,11 @@
   .ribbon {
     width: 100%;
     height: 4rem;
-    background: var(--gray-700);
+    background: #4a5568;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    border-top: 0.25rem solid;
-    border-bottom: 0.25rem solid;
   }
   
   .ribbon-content {
@@ -41,13 +45,39 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 1rem;
   }
   
-  .rhombus {
-    width: 2rem;
-    height: 2rem;
-    transform: rotate(45deg);
-    border: 2px solid rgba(255, 255, 255, 0.1);
+  .logo-shape {
+    width: 3.5rem;
+    height: 3rem;
+    animation: bob 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  }
+  
+  .logo-shape:nth-child(1) {
+    animation-delay: 0s;
+  }
+  
+  .logo-shape:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+  
+  .logo-shape:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+  
+  @keyframes bob {
+    0% {
+      transform: translateY(0.25rem);
+      animation-timing-function: ease-out;
+    }
+    50% {
+      transform: translateY(-0.25rem);
+      animation-timing-function: ease-in;
+    }
+    100% {
+      transform: translateY(0.25rem);
+    }
   }
   
   @media (max-width: 768px) {
@@ -55,9 +85,9 @@
       height: 3rem;
     }
     
-    .rhombus {
-      width: 1.5rem;
-      height: 1.5rem;
+    .logo-shape {
+      width: 2rem;
+      height: 2rem;
     }
   }
 </style>

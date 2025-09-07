@@ -75,7 +75,7 @@
     z-index: 2;
     display: block;
     --hero-left-pad: 1.25rem;
-    padding: 24rem 0 2.5rem var(--hero-left-pad);
+    padding: 30rem 0 2.5rem var(--hero-left-pad);
     text-align: left;
     color: #0b1e3a; /* navy */
     --kicker-inset: 0.35rem;
@@ -106,7 +106,7 @@
   .display .line { display: block; }
 
   @media (max-width: 51.25rem) {
-    .hero-headline { padding: 16rem 0 2rem var(--hero-left-pad); }
+    .hero-headline { padding: 30rem 0 2rem var(--hero-left-pad); }
     .kicker { font-size: 0.9rem; letter-spacing: 0.2em; }
     .display { font-size: clamp(2rem, 9vw, 3.25rem); }
   }
