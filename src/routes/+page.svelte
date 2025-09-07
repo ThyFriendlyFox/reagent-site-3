@@ -5,8 +5,8 @@
   import ProductsSection from '$lib/components/ProductsSection.svelte';
   import VolunteerSection from '$lib/components/VolunteerSection.svelte';
   import DonateSection from '$lib/components/DonateSection.svelte';
-  import NewsButton from '$lib/components/NewsButton.svelte';
   import SectionRibbon from '$lib/components/SectionRibbon.svelte';
+  import NewsletterNotification from '$lib/components/NewsletterNotification.svelte';
   
   const BASE_URL = 'https://www.reagent-systems.com';
   const breadcrumbJsonLd = {
@@ -44,10 +44,10 @@
 <!-- Hero Section -->
 <section class="hero-headline" aria-label="Primary message">
   <div class="inner">
-    <div class="kicker">ai research</div>
+    <!-- <div class="kicker"></div> -->
     <h1 class="display">
       <span class="line">open source</span>
-      <span class="line">privacy focused</span>
+      <span class="line">sentient computers</span>
     </h1>
   </div>
 </section>
@@ -66,8 +66,8 @@
 <SectionRibbon ribbonIndex={5} />
 <DonateSection />
 
-<!-- News Alert Footer -->
-<NewsButton />
+<!-- Newsletter Notification -->
+<NewsletterNotification />
 
 <style>
   .hero-headline {
