@@ -60,8 +60,8 @@
     position: absolute;
     inset: 0;
     z-index: 1;
-    /* tint only; displacement is applied directly on the background layer */
-    background-color: rgba(255, 255, 255, 0.5);
+    /* Dark overlay for hero section only */
+    background: radial-gradient(120% 120% at 50% 0%, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.7) 100%);
     pointer-events: none;
   }
 
