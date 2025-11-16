@@ -1,5 +1,6 @@
 <script lang="ts">
   import AgentsSection from '$lib/components/AgentsSection.svelte';
+  import TeamSection from '$lib/components/TeamSection.svelte';
   import VisionSection from '$lib/components/VisionSection.svelte';
   import ResearchSection from '$lib/components/ResearchSection.svelte';
   import ProductsSection from '$lib/components/ProductsSection.svelte';
@@ -7,6 +8,7 @@
   import DonateSection from '$lib/components/DonateSection.svelte';
   import SectionRibbon from '$lib/components/SectionRibbon.svelte';
   import NewsletterNotification from '$lib/components/NewsletterNotification.svelte';
+  import GitHubProjectsCarousel from '$lib/components/GitHubProjectsCarousel.svelte';
   
   const BASE_URL = 'https://www.reagent-systems.com';
   const breadcrumbJsonLd = {
@@ -41,94 +43,36 @@
   <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
 </svelte:head>
 
-<!-- Hero Section -->
-<section class="hero-headline" aria-label="Primary message">
-  <!-- Dark overlay for hero section only -->
-  <div class="hero-overlay"></div>
-  <div class="inner">
-    <!-- <div class="kicker"></div> -->
-    <h1 class="display">
-      <span class="line">open source</span>
-      <span class="line">sentient computers</span>
-    </h1>
-  </div>
+<!-- Hero Section - GitHub Projects Carousel -->
+<section class="hero-section">
+  <GitHubProjectsCarousel />
 </section>
 
 <!-- All Sections -->
-<SectionRibbon ribbonIndex={0} />
 <AgentsSection />
 <SectionRibbon ribbonIndex={1} />
-<VisionSection />
+<TeamSection />
 <SectionRibbon ribbonIndex={2} />
-<ResearchSection />
+<VisionSection />
 <SectionRibbon ribbonIndex={3} />
-<ProductsSection />
+<ResearchSection />
 <SectionRibbon ribbonIndex={4} />
-<VolunteerSection />
+<ProductsSection />
 <SectionRibbon ribbonIndex={5} />
+<VolunteerSection />
+<SectionRibbon ribbonIndex={6} />
 <DonateSection />
 
 <!-- Newsletter Notification -->
 <NewsletterNotification />
 
 <style>
-  .hero-headline {
+  .hero-section {
     position: relative;
     z-index: 2;
-    display: block;
-    --hero-left-pad: 1.25rem;
-    padding: 30rem 0 2.5rem var(--hero-left-pad);
-    text-align: left;
-    color: #f8f9fa; /* light */
-    --kicker-inset: 0.35rem;
-  }
-  
-  .hero-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    /* Dark overlay for hero section only */
-    background: radial-gradient(120% 120% at 50% 0%, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.7) 100%);
-    pointer-events: none;
-  }
-  .hero-headline .inner {
-    max-width: none;
     width: 100%;
-    margin: 0;
-  }
-  .kicker {
-    color: currentColor;
-    font-size: 0.95rem;
-    letter-spacing: 0.22em;
-    font-weight: 100;
-    margin-bottom: 0.25rem;
-    margin-left: 0;
-    padding-left: var(--kicker-inset);
-  }
-  .display {
-    margin: 0.25rem 0 0;
-    line-height: 1.05;
-    letter-spacing: -0.01em;
-    font-weight: 200;
-    font-size: clamp(2.25rem, 7vw, 6rem);
-    margin-left: 0;
-    padding-left: 0;
-    /* Liquid glass effect for the letters themselves */
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: 
-      drop-shadow(0 0 8px rgba(255, 255, 255, 0.3))
-      drop-shadow(0 0 16px rgba(255, 255, 255, 0.2))
-      drop-shadow(0 0 24px rgba(255, 255, 255, 0.1));
-  }
-  .display .line { display: block; }
-
-  @media (max-width: 51.25rem) {
-    .hero-headline { padding: 30rem 0 2rem var(--hero-left-pad); }
-    .kicker { font-size: 0.9rem; letter-spacing: 0.2em; }
-    .display { font-size: clamp(2rem, 9vw, 3.25rem); }
+    overflow: hidden;
+    box-sizing: border-box;
   }
 </style>
 
