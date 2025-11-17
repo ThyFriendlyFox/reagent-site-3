@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   
   let isExpanded = false;
   let email = '';
@@ -7,13 +7,24 @@
   let showSuccess = false;
   let isVisible = true;
   let bannerElement: HTMLElement;
+  let emailInput: HTMLInputElement;
 
   onMount(() => {
     console.log('NewsletterNotification component mounted');
   });
 
-  function toggleExpansion() {
+  async function toggleExpansion() {
+    const wasExpanded = isExpanded;
     isExpanded = !isExpanded;
+    
+    // If expanding, focus the email input after animation
+    if (!wasExpanded && isExpanded) {
+      await tick(); // Wait for DOM update
+      // Small delay to ensure form is visible
+      setTimeout(() => {
+        emailInput?.focus();
+      }, 100);
+    }
   }
 
   async function handleSubmit(event: Event) {
@@ -87,6 +98,7 @@
               id="newsletter-email"
               type="email"
               bind:value={email}
+              bind:this={emailInput}
               placeholder="Enter your email address"
               required
               disabled={isSubmitting}
