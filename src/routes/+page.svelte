@@ -71,6 +71,7 @@
     position: relative;
     z-index: 2;
     width: 100%;
+    max-width: 100vw;
     overflow: hidden;
     box-sizing: border-box;
   }

@@ -253,8 +253,7 @@
   /* Mobile Responsive */
   @media (max-width: 768px) {
     .navigation-dots {
-      right: 1rem;
-      gap: 0.5rem;
+      display: none;
     }
     
     .dot {

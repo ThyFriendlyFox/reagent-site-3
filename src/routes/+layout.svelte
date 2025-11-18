@@ -109,11 +109,17 @@
 
 <nav class="site-header" bind:this={headerEl}>
   <div class="wrap compact">
-    <a class="nav-link" href="#research" on:click={() => scrollToSection('research')}>research</a>
+    <a class="nav-link" href="#research" on:click={() => scrollToSection('research')}>
+      <span class="nav-text-full">research</span>
+      <span class="nav-text-abbr">rsch</span>
+    </a>
     <a class="brand" href="/" aria-label="Reagent Systems LLC home" bind:this={brandEl}>
       <img src="/logo.svg" alt="Reagent Systems LLC" class="brand-logo" decoding="async" fetchpriority="high" />
     </a>
-    <a class="nav-link" href="#products" on:click={() => scrollToSection('products')}>products</a>
+    <a class="nav-link" href="#products" on:click={() => scrollToSection('products')}>
+      <span class="nav-text-full">products</span>
+      <span class="nav-text-abbr">prod</span>
+    </a>
   </div>
 </nav>
 
@@ -207,6 +213,10 @@
     transform-origin: center;
     transition: transform 180ms ease, color 150ms ease, opacity 150ms ease;
   }
+
+  .nav-text-abbr {
+    display: none;
+  }
   .nav-link:hover, .nav-link:focus-visible { opacity: 1; color: var(--red-600); transform: scale(1.07); }
   .nav-link:first-child { justify-self: start; }
   .nav-link:last-child { justify-self: end; }
@@ -275,6 +285,17 @@
       --hex-width: 16rem;
       --hex-height: 12rem;
     }
-    .nav-link { top: -1.75rem; }
+    .nav-link { 
+      top: -1.75rem;
+      font-size: 1.1rem;
+    }
+
+    .nav-text-full {
+      display: none;
+    }
+
+    .nav-text-abbr {
+      display: inline;
+    }
   }
 </style>

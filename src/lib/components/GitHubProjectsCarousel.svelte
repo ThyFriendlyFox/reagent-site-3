@@ -328,9 +328,10 @@
     position: relative;
     overflow: hidden;
     width: 100%;
+    max-width: 100vw;
     margin: 0;
     padding: calc(clamp(20rem, 50vh, 20rem) + 1rem) 0 1rem var(--hero-left-pad, 1.25rem);
-    min-height: calc(clamp(20rem, 50vh, 30rem) + 17rem);
+    min-height: calc(clamp(20rem, 50vh, 30rem) + 22rem);
     z-index: 2;
     color: #f8f9fa;
     box-sizing: border-box;
@@ -342,15 +343,17 @@
     left: 0;
     width: 100%;
     height: 100%;
+    max-width: 100vw;
     z-index: 0;
     /* Dark overlay for hero section only */
     background: radial-gradient(120% 120% at 50% 0%, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.7) 100%);
     pointer-events: none;
+    overflow: hidden;
   }
 
   .carousel-title {
     position: absolute;
-    bottom: 16.5rem;
+    bottom: 19rem;
     left: var(--hero-left-pad, 1.25rem);
     z-index: 3;
     color: #f8f9fa;
@@ -388,7 +391,7 @@
     gap: clamp(1rem, 3vw, 1.5rem);
     width: max-content;
     will-change: transform;
-    padding-top: calc(clamp(20rem, 50vh, 30rem) + 1rem);
+    padding-top: calc(clamp(20rem, 50vh, 30rem) + 5rem);
     padding-left: var(--hero-left-pad, 1.25rem);
     padding-right: var(--hero-left-pad, 1.25rem);
     z-index: 1;
@@ -521,7 +524,7 @@
   @media (max-width: 51.25rem) {
     .github-projects-carousel {
       padding: calc(clamp(15rem, 40vh, 25rem) + 0.75rem) 0 1.5rem var(--hero-left-pad, 1.25rem);
-      min-height: calc(clamp(15rem, 40vh, 25rem) + 15rem);
+      min-height: calc(clamp(20rem, 50vh, 30rem) + 15rem);
     }
 
     .hero-overlay {
@@ -529,7 +532,7 @@
     }
 
     .carousel-title {
-      bottom: 13.5rem;
+      bottom: 20rem;
     }
 
     .title-word {
@@ -537,11 +540,11 @@
     }
 
     .title-line {
-      font-size: clamp(2rem, 9vw, 3.25rem);
+      font-size: clamp(3.5rem, 14vw, 6rem);
     }
 
     .belt {
-      padding-top: calc(clamp(15rem, 40vh, 25rem) + 0.75rem);
+      padding-top: calc(clamp(15rem, 40vh, 25rem) + 0.5rem);
       padding-left: var(--hero-left-pad, 1.25rem);
       padding-right: var(--hero-left-pad, 1.25rem);
       gap: 1rem;

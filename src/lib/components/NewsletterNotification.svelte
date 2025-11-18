@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { onMount, tick } from 'svelte';
+  import { onMount, onDestroy, tick } from 'svelte';
+  import { browser } from '$app/environment';
   
   let isExpanded = false;
   let email = '';
@@ -9,16 +10,31 @@
   let bannerElement: HTMLElement;
   let emailInput: HTMLInputElement;
 
+  function handleClickOutside(event: MouseEvent) {
+    if (isExpanded && bannerElement && !bannerElement.contains(event.target as Node)) {
+      isExpanded = false;
+    }
+  }
+
   onMount(() => {
     console.log('NewsletterNotification component mounted');
+    // Add click outside handler only in browser
+    if (browser) {
+      document.addEventListener('click', handleClickOutside);
+    }
   });
 
-  async function toggleExpansion() {
-    const wasExpanded = isExpanded;
-    isExpanded = !isExpanded;
-    
-    // If expanding, focus the email input after animation
-    if (!wasExpanded && isExpanded) {
+  onDestroy(() => {
+    if (browser) {
+      document.removeEventListener('click', handleClickOutside);
+    }
+  });
+
+  async function expandBanner() {
+    if (!isExpanded) {
+      isExpanded = true;
+      
+      // Focus the email input after animation
       await tick(); // Wait for DOM update
       // Small delay to ensure form is visible
       setTimeout(() => {
@@ -66,8 +82,8 @@
   bind:this={bannerElement}
   role="button"
   aria-label="Newsletter signup notification"
-  on:click={toggleExpansion}
-  on:keydown={(e) => e.key === 'Enter' && toggleExpansion()}
+  on:click|stopPropagation={expandBanner}
+  on:keydown={(e) => e.key === 'Enter' && expandBanner()}
   tabindex="0"
 >
   <div class="banner-content">
@@ -91,7 +107,7 @@
           <span>Thank you for subscribing! We'll keep you updated.</span>
         </div>
       {:else}
-        <form on:submit={handleSubmit}>
+        <form on:submit={handleSubmit} on:click|stopPropagation>
           <div class="form-group">
             <label for="newsletter-email" class="visually-hidden">Email address</label>
             <input
