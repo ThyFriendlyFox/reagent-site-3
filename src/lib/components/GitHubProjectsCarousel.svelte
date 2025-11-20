@@ -465,6 +465,7 @@
       </div>
     </div>
     <div class="carousel-title">
+      <div class="subtitle-text">open source ai research</div>
       <h2 class="title-line"><span class="title-word">team</span> <span class="title-word">reagent</span></h2>
     </div>
   </section>
@@ -519,6 +520,17 @@
 
   .title-word {
     display: inline;
+  }
+
+  .subtitle-text {
+    font-family: 'avionic', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-size: clamp(0.75rem, 1.5vw, 1rem);
+    font-weight: 200;
+    color: #1A2B3C;
+    text-transform: lowercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    opacity: 0.9;
   }
 
   .title-line {
