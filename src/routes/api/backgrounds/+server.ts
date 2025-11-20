@@ -3,23 +3,30 @@ import { json } from '@sveltejs/kit';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
+// Known background images - fallback for serverless environments like Vercel
+const KNOWN_BACKGROUNDS = ['image.png'];
+
 async function getStaticBackgroundsDir(): Promise<string> {
-  // Assume the dev server is launched from the SvelteKit app directory
-  // so the static dir is ./static. If not found, try ../static for safety.
+  // Try multiple possible paths for different environments
   const cwd = process.cwd();
-  const primary = path.join(cwd, 'static', 'backgrounds');
-  const fallback = path.join(cwd, '..', 'static', 'backgrounds');
-  try {
-    await fs.access(primary);
-    return primary;
-  } catch {
+  const possiblePaths = [
+    path.join(cwd, 'static', 'backgrounds'),
+    path.join(cwd, '..', 'static', 'backgrounds'),
+    // Vercel build path
+    path.join(process.cwd(), '.vercel', 'output', 'static', 'backgrounds'),
+  ];
+  
+  for (const dirPath of possiblePaths) {
     try {
-      await fs.access(fallback);
-      return fallback;
+      await fs.access(dirPath);
+      return dirPath;
     } catch {
-      return primary; // default; will fail upstream and return empty list
+      continue;
     }
   }
+  
+  // Return first path as default (will be handled gracefully)
+  return possiblePaths[0];
 }
 
 function isImageFile(fileName: string): boolean {
@@ -37,10 +44,20 @@ export const GET: RequestHandler = async () => {
       .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 
     const urls = files.map((name) => `/backgrounds/${name}`);
-    return json({ images: urls }, { status: 200 });
+    
+    // If we found files, return them
+    if (urls.length > 0) {
+      return json({ images: urls }, { status: 200 });
+    }
+    
+    // Fallback to known backgrounds if filesystem read failed
+    const fallbackUrls = KNOWN_BACKGROUNDS.map((name) => `/backgrounds/${name}`);
+    return json({ images: fallbackUrls }, { status: 200 });
   } catch {
-    // If directory doesn't exist or reading fails, return empty list.
-    return json({ images: [] }, { status: 200 });
+    // If directory doesn't exist or reading fails, return known backgrounds
+    // This ensures the background works on Vercel even if filesystem access fails
+    const fallbackUrls = KNOWN_BACKGROUNDS.map((name) => `/backgrounds/${name}`);
+    return json({ images: fallbackUrls }, { status: 200 });
   }
 };
 
