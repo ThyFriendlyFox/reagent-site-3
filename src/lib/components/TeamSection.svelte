@@ -28,7 +28,7 @@
     {
       name: 'Ethan Shelton',
       alias: 'Spike',
-      title: 'Chief Technical Officer',
+      title: 'Chief Information Officer',
       age: 25,
       location: 'Florida',
       bio: 'Hello, I\'m Spike! I\'ve been coding since I was 13, diving into mods, mobile games, VR experiences, websites, AWS, and software development. I thrive on the challenge, the puzzles, and the fun of piecing it all together. Currently, I\'m focusing on my vlogging and VR YouTube channels and crafting my own AI assistant named KIT. This is only the beginning to my story of relentless creation.',
@@ -36,7 +36,7 @@
     },
     {
       name: 'BentlyBro',
-      title: 'Chief Information Officer',
+      title: 'Chief Technical Officer',
       bio: 'Hey, I\'m Bently — a self-taught developer, systems tinkerer, and all-around builder with a love for pushing boundaries. Whether it\'s designing encrypted chat platforms, wiring up brain-computer interfaces, or spinning up AI agents that talk to each other, I\'m always crafting something weird, useful, or both. My portfolio (which totally needs an update) showcases a mix of tools like Promptly—a live website builder powered by natural language—and NoteNavigator, an AI music recommender that ran a little too close to Spotify\'s sun. As the community lead and developer behind AutoGPT, I balance hands-on coding with leading a vibrant Discord full of chaotic brilliance. Most days you\'ll find me deep in Python, JavaScript, or building cross-device systems that just sync. Other days, I\'m designing VR worlds, experimenting with EEG data, or mapping out new ways to bring decentralized, real-time tech to life. Welcome to my world—it\'s a bit experimental, often chaotic, but always driven by curiosity.',
       github: 'Bentlybro'
     },
