@@ -18,7 +18,7 @@
   let projects: GitHubProject[] = [];
 
   // Animation state
-  let containerEl: HTMLDivElement | null = null;
+  let containerEl: HTMLElement | null = null;
   let beltAEl: HTMLDivElement | null = null;
   let beltWidth = 0; // width of one full belt (in px)
   let offsetX = 0; // current leftward offset (px)
@@ -27,8 +27,29 @@
   const BASE_DURATION_S = 180; // 3 minutes for full rotation (slower than reviews)
   const MIN_SPEED_PX_S = 6; // ensure it always moves
 
+  // Interaction state
+  let isInteracting = false;
+  let dragStartX = 0;
+  let dragOffsetX = 0;
+  let userOffsetX = 0; // User's drag/swipe offset
+  let interactionStartTime = 0;
+  let lastInteractionTime = 0;
+  let hasMoved = false; // Track if user actually dragged
+  const INTERACTION_DECAY_MS = 300; // Time after interaction ends before resuming full speed
+  const DRAG_THRESHOLD = 5; // Pixels to move before considering it a drag
+
   function computeBaseSpeed(): number {
     if (beltWidth <= 0) return MIN_SPEED_PX_S;
+    // Slow down during interaction
+    if (isInteracting) {
+      return Math.max(MIN_SPEED_PX_S * 0.3, beltWidth / BASE_DURATION_S);
+    }
+    // Gradually resume speed after interaction
+    const timeSinceInteraction = performance.now() - lastInteractionTime;
+    if (timeSinceInteraction < INTERACTION_DECAY_MS) {
+      const factor = timeSinceInteraction / INTERACTION_DECAY_MS;
+      return Math.max(MIN_SPEED_PX_S, beltWidth / BASE_DURATION_S) * (0.3 + 0.7 * factor);
+    }
     return Math.max(MIN_SPEED_PX_S, beltWidth / BASE_DURATION_S);
   }
 
@@ -39,12 +60,23 @@
       const dt = Math.max(0, (ts - lastFrameTs) / 1000);
       lastFrameTs = ts;
       const base = computeBaseSpeed();
-      offsetX -= base * dt;
-      // wrap offset to [-beltWidth, 0)
-      if (beltWidth > 0) {
-        if (offsetX <= -beltWidth) offsetX += beltWidth;
-        if (offsetX >= 0) offsetX -= beltWidth;
+      
+      // Only advance automatic animation if not actively dragging
+      if (!isInteracting) {
+        offsetX -= base * dt;
       }
+      
+      // Apply user offset
+      const totalOffset = offsetX + userOffsetX;
+      
+      // Wrap offset to [-beltWidth, 0)
+      if (beltWidth > 0) {
+        let wrappedOffset = totalOffset;
+        if (wrappedOffset <= -beltWidth) wrappedOffset += beltWidth;
+        if (wrappedOffset >= 0) wrappedOffset -= beltWidth;
+        offsetX = wrappedOffset - userOffsetX;
+      }
+      
       rafId = requestAnimationFrame(frame);
     };
     rafId = requestAnimationFrame(frame);
@@ -53,6 +85,111 @@
   function stopAnimation() {
     if (rafId != null) cancelAnimationFrame(rafId);
     rafId = null;
+  }
+
+  function handleInteractionStart(clientX: number) {
+    isInteracting = true;
+    dragStartX = clientX;
+    dragOffsetX = 0;
+    hasMoved = false;
+    interactionStartTime = performance.now();
+  }
+
+  function handleInteractionMove(clientX: number) {
+    if (!isInteracting) return;
+    dragOffsetX = clientX - dragStartX;
+    const absOffset = Math.abs(dragOffsetX);
+    
+    // Only consider it a drag if moved beyond threshold
+    if (absOffset > DRAG_THRESHOLD) {
+      hasMoved = true;
+      userOffsetX = dragOffsetX;
+    }
+  }
+
+  function handleInteractionEnd() {
+    if (!isInteracting) return;
+    const wasDragging = hasMoved && Math.abs(userOffsetX) > DRAG_THRESHOLD;
+    isInteracting = false;
+    lastInteractionTime = performance.now();
+    
+    if (wasDragging) {
+      // Gradually decay user offset back to 0
+      const decayStart = userOffsetX;
+      const decayDuration = 200; // ms
+      const startTime = performance.now();
+      
+      const decay = () => {
+        const elapsed = performance.now() - startTime;
+        if (elapsed < decayDuration) {
+          const progress = elapsed / decayDuration;
+          // Ease out
+          const easeProgress = 1 - Math.pow(1 - progress, 3);
+          userOffsetX = decayStart * (1 - easeProgress);
+          requestAnimationFrame(decay);
+        } else {
+          userOffsetX = 0;
+        }
+      };
+      requestAnimationFrame(decay);
+    } else {
+      // Reset immediately if it was just a click
+      userOffsetX = 0;
+    }
+    
+    hasMoved = false;
+  }
+
+  // Touch handlers
+  function handleTouchStart(e: TouchEvent) {
+    if (e.touches.length === 1) {
+      handleInteractionStart(e.touches[0].clientX);
+    }
+  }
+
+  function handleTouchMove(e: TouchEvent) {
+    if (e.touches.length === 1 && isInteracting) {
+      handleInteractionMove(e.touches[0].clientX);
+      // Only prevent default if actually dragging
+      if (hasMoved) {
+        e.preventDefault();
+      }
+    }
+  }
+
+  function handleTouchEnd(e: TouchEvent) {
+    if (isInteracting) {
+      // Only prevent default if it was a drag
+      if (hasMoved && Math.abs(userOffsetX) > DRAG_THRESHOLD) {
+        e.preventDefault();
+      }
+      handleInteractionEnd();
+    }
+  }
+
+  // Mouse handlers
+  function handleMouseDown(e: MouseEvent) {
+    if (e.button === 0) { // Left mouse button
+      handleInteractionStart(e.clientX);
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+    }
+  }
+
+  function handleMouseMove(e: MouseEvent) {
+    if (isInteracting) {
+      handleInteractionMove(e.clientX);
+      // Only prevent default if actually dragging
+      if (hasMoved) {
+        e.preventDefault();
+      }
+    }
+  }
+
+  function handleMouseUp(e: MouseEvent) {
+    handleInteractionEnd();
+    window.removeEventListener('mousemove', handleMouseMove);
+    window.removeEventListener('mouseup', handleMouseUp);
   }
 
   async function measureAndStart() {
@@ -95,10 +232,20 @@
 </script>
 
 {#if projects.length}
-  <section class="github-projects-carousel" aria-label="Open source projects" bind:this={containerEl}>
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+  <section 
+    class="github-projects-carousel" 
+    class:interacting={isInteracting}
+    aria-label="Open source projects" 
+    bind:this={containerEl}
+    on:touchstart={handleTouchStart}
+    on:touchmove={handleTouchMove}
+    on:touchend={handleTouchEnd}
+    on:mousedown={handleMouseDown}
+  >
     <div class="hero-overlay">
       <div class="belt b1" aria-hidden="true" bind:this={beltAEl}
-           style={`transform: translate3d(${offsetX}px,0,0);`}>
+           style={`transform: translate3d(${offsetX + userOffsetX}px,0,0);`}>
       {#each projects as project (project.id)}
         <a href={project.url} target="_blank" rel="noopener noreferrer" class="card">
           <div class="card-header">
@@ -171,7 +318,7 @@
       {/each}
       </div>
       <div class="belt b2" aria-hidden="true"
-           style={`transform: translate3d(${offsetX + beltWidth}px,0,0);`}>
+           style={`transform: translate3d(${offsetX + beltWidth + userOffsetX}px,0,0);`}>
       {#each projects as project (project.id + '-b2')}
         <a href={project.url} target="_blank" rel="noopener noreferrer" class="card">
           <div class="card-header">
@@ -244,7 +391,7 @@
       {/each}
       </div>
       <div class="belt b2" aria-hidden="true"
-           style={`transform: translate3d(${offsetX + beltWidth}px,0,0);`}>
+           style={`transform: translate3d(${offsetX + beltWidth + userOffsetX}px,0,0);`}>
       {#each projects as project (project.id + '-b2')}
         <a href={project.url} target="_blank" rel="noopener noreferrer" class="card">
           <div class="card-header">
@@ -335,6 +482,17 @@
     z-index: 2;
     color: #f8f9fa;
     box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y pinch-zoom;
+  }
+
+  .github-projects-carousel.interacting {
+    cursor: grabbing !important;
+  }
+
+  .github-projects-carousel:not(.interacting) {
+    cursor: grab;
   }
 
   .hero-overlay {
@@ -469,8 +627,11 @@
     flex: 1;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 400;
   }
 
   .card-footer {

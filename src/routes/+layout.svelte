@@ -87,6 +87,9 @@
   <title>Reagent Systems LLC | Researching Sentient Computing</title>
   <meta name="description" content="Reagent Systems LLC pushes the boundaries of research into sentient computing." />
   <link rel="canonical" href={`${BASE_URL}${$page.url.pathname}`} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet" />
 
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Reagent Systems LLC" />

@@ -6,6 +6,7 @@
   import ProductsSection from '$lib/components/ProductsSection.svelte';
   import VolunteerSection from '$lib/components/VolunteerSection.svelte';
   import DonateSection from '$lib/components/DonateSection.svelte';
+  import SocialSection from '$lib/components/SocialSection.svelte';
   import SectionRibbon from '$lib/components/SectionRibbon.svelte';
   import NewsletterNotification from '$lib/components/NewsletterNotification.svelte';
   import GitHubProjectsCarousel from '$lib/components/GitHubProjectsCarousel.svelte';
@@ -34,12 +35,13 @@
   <meta property="og:title" content="Reagent Systems LLC | AI Research, Agentic Apps" />
   <meta property="og:description" content="Pushing the boundaries of research into sentient computing." />
   <meta property="og:url" content="https://www.reagent-systems.com/" />
-  <meta property="og:image" content="https://www.reagent-systems.com/logo.svg" />
+  <meta property="og:image" content="https://www.reagent-systems.com/og-image.svg" />
+  <meta property="og:image:type" content="image/svg+xml" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Reagent Systems LLC | AI Research, Agentic Apps" />
   <meta name="twitter:description" content="Pushing the boundaries of research into sentient computing." />
-  <meta name="twitter:image" content="https://www.reagent-systems.com/logo.svg" />
+  <meta name="twitter:image" content="https://www.reagent-systems.com/og-image.svg" />
   <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
 </svelte:head>
 
@@ -62,6 +64,8 @@
 <VolunteerSection />
 <SectionRibbon ribbonIndex={6} />
 <DonateSection />
+<SectionRibbon ribbonIndex={7} />
+<SocialSection />
 
 <!-- Newsletter Notification -->
 <NewsletterNotification />
