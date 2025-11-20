@@ -503,8 +503,6 @@
     height: 100%;
     max-width: 100vw;
     z-index: 0;
-    /* Dark overlay for hero section only */
-    background: radial-gradient(120% 120% at 50% 0%, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.7) 100%);
     pointer-events: none;
     overflow: hidden;
   }
@@ -529,15 +527,7 @@
     letter-spacing: -0.01em;
     font-weight: 200;
     font-size: clamp(2.25rem, 7vw, 6rem);
-    /* Liquid glass effect for the letters themselves */
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: 
-      drop-shadow(0 0 8px rgba(255, 255, 255, 0.3))
-      drop-shadow(0 0 16px rgba(255, 255, 255, 0.2))
-      drop-shadow(0 0 24px rgba(255, 255, 255, 0.1));
+    color: #000000;
     display: block;
   }
 
