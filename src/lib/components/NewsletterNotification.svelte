@@ -1,12 +1,15 @@
 <script lang="ts">
   import { onMount, onDestroy, tick } from 'svelte';
   import { browser } from '$app/environment';
+  import { db } from '$lib/firebase';
+  import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
   
   let isExpanded = false;
   let email = '';
   let isSubmitting = false;
   let showSuccess = false;
   let isVisible = true;
+  let submitMessage = '';
   let bannerElement: HTMLElement;
   let emailInput: HTMLInputElement;
 
@@ -47,12 +50,29 @@
     event.preventDefault();
     if (!email || isSubmitting) return;
     
+    // Validate email format
+    if (!email.includes('@')) {
+      submitMessage = 'Please enter a valid email address';
+      showSuccess = false;
+      return;
+    }
+    
+    if (!db) {
+      submitMessage = 'Firebase not initialized. Please refresh the page.';
+      showSuccess = false;
+      return;
+    }
+    
     isSubmitting = true;
+    submitMessage = '';
     
     try {
-      // Simulate API call - replace with actual newsletter signup endpoint
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await addDoc(collection(db, 'newsletter'), {
+        email: email,
+        timestamp: serverTimestamp()
+      });
       
+      submitMessage = 'Thank you! You\'ve been added to the newsletter.';
       showSuccess = true;
       email = '';
       
@@ -60,10 +80,17 @@
       setTimeout(() => {
         showSuccess = false;
         isExpanded = false;
+        submitMessage = '';
       }, 3000);
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('Newsletter signup failed:', error);
+      if (error?.code === 'permission-denied') {
+        submitMessage = 'Permission denied. Please check Firebase security rules.';
+      } else {
+        submitMessage = 'Something went wrong. Please try again.';
+      }
+      showSuccess = false;
     } finally {
       isSubmitting = false;
     }
@@ -104,7 +131,7 @@
       {#if showSuccess}
         <div class="success-message">
           <span class="success-icon">✅</span>
-          <span>Thank you for subscribing! We'll keep you updated.</span>
+          <span>{submitMessage || 'Thank you for subscribing! We\'ll keep you updated.'}</span>
         </div>
       {:else}
         <form on:submit={handleSubmit} on:click|stopPropagation>
@@ -128,6 +155,11 @@
               {isSubmitting ? 'Subscribing...' : 'Subscribe'}
             </button>
           </div>
+          {#if submitMessage && !showSuccess}
+            <div class="error-message">
+              {submitMessage}
+            </div>
+          {/if}
         </form>
       {/if}
     </div>
@@ -297,6 +329,13 @@
   .success-icon {
     font-size: 1.25rem;
     flex-shrink: 0;
+  }
+
+  .error-message {
+    padding: 0.75rem 0;
+    font-size: 0.9rem;
+    color: rgba(255, 200, 200, 0.95);
+    text-align: center;
   }
 
   .visually-hidden {

@@ -21,6 +21,7 @@
 		"vite": "^7.0.4"
 	},
 	"dependencies": {
+		"firebase": "^12.6.0",
 		"liquid-css": "^1.0.1"
 	}
 }

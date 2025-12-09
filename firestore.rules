@@ -1,0 +1,41 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow users to create and update their own user document
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow user session tracking (for authenticated users)
+    match /user_sessions/{document} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Allow usage logging (both authenticated and anonymous)
+    match /usage_logs/{document} {
+      allow read, write: if true;
+    }
+    
+    match /anonymous_usage/{document} {
+      allow read, write: if true;
+    }
+    
+    match /daily_stats/{document} {
+      allow read, write: if true;
+    }
+    
+    // 🆕 WAITLIST COLLECTION - Allow anyone to join the waitlist
+    match /waitlist/{document} {
+      allow create: if true;  // Anyone can add to waitlist
+      allow read: if request.auth != null; // Only authenticated users can read
+    }
+    
+    // 🆕 NEWSLETTER COLLECTION - Allow anyone to subscribe to newsletter
+    match /newsletter/{document} {
+      allow create: if true;  // Anyone can subscribe to newsletter
+      allow read: if request.auth != null; // Only authenticated users can read
+    }
+  }
+}
